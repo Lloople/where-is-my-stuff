@@ -2,13 +2,12 @@ import Fluent
 import Vapor
 
 func routes(_ app: Application) throws {
-    app.get { req in
-        return "It works!"
-    }
+    
+    try routesApi(app)
+}
 
-    app.get("hello") { req -> String in
-        return "Hello, world!"
-    }
-
-    try app.register(collection: TodoController())
+func routesApi(_ app: Application) throws {
+    app.get("api", "users", use: ApiUserIndexAction().invoke)
+    
+    app.get("api", "users", ":userId", "things", use: ApiThingIndexAction().invoke)
 }
