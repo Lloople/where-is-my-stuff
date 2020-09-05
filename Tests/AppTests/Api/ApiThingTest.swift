@@ -19,4 +19,25 @@ final class ApiThingTest: TestCase {
             XCTAssertContains(res.body.string, thing.id?.uuidString)
         }
     }
+    
+    func test_can_create_a_thing() throws {
+        
+        let user: User = try User(name: "Mark Watney", email: "mwatney@nasa.gov", password: "spacepirate")
+        
+        try user.create(on: app.db).wait()
+        
+        try app.test(.POST, "api/users/\(user.id!)/things", beforeRequest: { req in
+            try req.content.encode([
+                "name": "Rover",
+                "description": "Since I'm driving this without authorization, I'm a space pirate!"
+            ])
+        }) { res in
+            XCTAssertEqual(res.status, .ok)
+
+            let thing: Thing = try Thing.query(on: app.db).first().wait()!
+            
+            XCTAssertEqual("Rover", thing.name)
+            XCTAssertEqual(user.id!, thing.$user.id)
+        }
+    }
 }

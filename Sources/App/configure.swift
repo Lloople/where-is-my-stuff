@@ -14,12 +14,12 @@ public func configure(_ app: Application) throws {
 
 func prepareDatabase(_ app: Application) {
     app.databases.use(.mysql(
-        hostname: Environment.get("DATABASE_HOST") ?? "localhost",
+        hostname: Environment.get("DATABASE_HOST") ?? "127.0.0.1",
         username: Environment.get("DATABASE_USERNAME") ?? "vapor",
         password: Environment.get("DATABASE_PASSWORD") ?? "vapor",
         database: Environment.get("DATABASE_NAME") ?? "where_is_my_stuff",
         tlsConfiguration: .forClient(certificateVerification: .none)
-        ), as: .mysql)
+    ), as: .mysql)
     
     app.migrations.add(CreateUser())
     app.migrations.add(CreateThing())
