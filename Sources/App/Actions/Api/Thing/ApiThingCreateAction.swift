@@ -7,16 +7,22 @@ struct ApiThingCreateAction {
     
     func invoke(req: Request) throws -> EventLoopFuture<Response> {
       
-        try CreateThingRequest.validate(content: req)
+        try CreateThingContent.validate(content: req)
         
-        let thing = try req.content.decode(Thing.self)
+        let input = try req.content.decode(CreateThingContent.self)
+
+        let thing = try Thing(
+            name: input.name,
+            description: input.description,
+            status: input.status
+        )
         
         return User.find(req.parameters.get("userId"), on: req.db)
             .unwrap(or: Abort(.notFound))
             .flatMap { user in
                 user.$things
                     .create(thing, on: req.db)
-                    .map{ Response( status: .ok) }
+                    .map { Response( status: .ok) }
         }
     }
 }

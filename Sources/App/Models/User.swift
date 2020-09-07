@@ -16,11 +16,14 @@ final class User: Model, Content {
     @Field(key: "password")
     var password: String
     
-    @Field(key: "created_at")
-    var createdAt: Date
-    
     @Children(for: \.$user)
     var things: [Thing]
+    
+    @Timestamp(key: "created_at", on: .create)
+    var createdAt: Date?
+    
+    @Timestamp(key: "updated_at", on: .update)
+    var updatedAt: Date?
 
     init() { }
 
@@ -29,6 +32,5 @@ final class User: Model, Content {
         self.name = name
         self.email = email
         self.password = try Bcrypt.hash(password)
-        self.createdAt = Date()
     }
 }

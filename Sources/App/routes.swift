@@ -7,8 +7,11 @@ func routes(_ app: Application) throws {
 }
 
 func routesApi(_ app: Application) throws {
-    app.get("api", "users", use: ApiUserIndexAction().invoke)
+    let api = app.grouped("api")
+                
+    api.get("users", use: ApiUserIndexAction().invoke)
+    api.post("users", use: ApiUserCreateAction().invoke)
     
-    app.get("api", "users", ":userId", "things", use: ApiThingIndexAction().invoke)
-    app.post("api", "users", ":userId", "things", use: ApiThingCreateAction().invoke)
+    api.get("users", ":userId", "things", use: ApiThingIndexAction().invoke)
+    api.post("users", ":userId", "things", use: ApiThingCreateAction().invoke)
 }

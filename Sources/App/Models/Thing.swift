@@ -23,14 +23,18 @@ final class Thing: Model, Content {
     @Field(key: "photo")
     var photo: String?
     
-    @Field(key: "created_at")
-    var createdAt: Date
+    @Timestamp(key: "created_at", on: .create)
+    var createdAt: Date?
+    
+    @Timestamp(key: "updated_at", on: .update)
+    var updatedAt: Date?
     
     init() { }
     
-    init(name: String) throws {
+    init(name: String, description: String? = nil, status: String? = nil, photo: String? = nil) throws {
         self.name = name
-        self.createdAt = Date()
+        self.description = description
+        self.status = status
+        self.photo = photo
     }
-    
 }

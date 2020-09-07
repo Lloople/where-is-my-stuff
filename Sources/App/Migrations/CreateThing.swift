@@ -9,8 +9,9 @@ struct CreateThing: Migration {
             .field("name", .string, .required)
             .field("description", .string)
             .field("status", .string)
-            .field("created_at", .datetime, .required)
             .field("photo", .string)
+            .field("created_at", .datetime, .required)
+            .field("updated_at", .datetime, .required)
             .create()
     }
     

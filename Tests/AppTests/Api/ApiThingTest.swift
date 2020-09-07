@@ -26,7 +26,7 @@ final class ApiThingTest: TestCase {
         
         try user.create(on: app.db).wait()
         
-        try app.test(.POST, "api/users/\(user.id!)/things", beforeRequest: { req in
+        try app.test(.POST, "api/users/\(user.requireID())/things", beforeRequest: { req in
             try req.content.encode([
                 "name": "Rover",
                 "description": "Since I'm driving this without authorization, I'm a space pirate!"
@@ -34,10 +34,12 @@ final class ApiThingTest: TestCase {
         }) { res in
             XCTAssertEqual(res.status, .ok)
 
-            let thing: Thing = try Thing.query(on: app.db).first().wait()!
+            let thing: Thing = try Thing.query(on: app.db).first()
+                .unwrap(or: Abort(.notFound))
+                .wait()
             
             XCTAssertEqual("Rover", thing.name)
-            XCTAssertEqual(user.id!, thing.$user.id)
+            XCTAssertEqual(try user.requireID(), thing.$user.id)
         }
     }
 }
