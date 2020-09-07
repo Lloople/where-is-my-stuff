@@ -11,7 +11,7 @@ final class ApiUserTest: TestCase {
         try user.create(on: app.db).wait()
         
         try app.test(.GET, "api/users") { res in
-            XCTAssertEqual(res.status, .ok)
+            XCTAssertEqual(res.status, .created)
             XCTAssertContains(res.body.string, user.id?.uuidString)
         }
     }

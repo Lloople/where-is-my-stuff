@@ -20,9 +20,8 @@ struct ApiThingCreateAction {
         return User.find(req.parameters.get("userId"), on: req.db)
             .unwrap(or: Abort(.notFound))
             .flatMap { user in
-                user.$things
-                    .create(thing, on: req.db)
-                    .map { Response( status: .ok) }
-        }
+                user.$things.create(thing, on: req.db)
+            }
+            .map { Response(status: .created) }
     }
 }

@@ -16,6 +16,6 @@ struct ApiUserCreateAction {
             password: input.password
         )
         
-        return user.create(on: req.db).map { Response(status: .ok) }
+        return user.create(on: req.db).map { Response(status: .created) }
     }
 }
