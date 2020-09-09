@@ -25,7 +25,7 @@ class TestCase: XCTestCase {
         try super.tearDownWithError()
     }
     
-    internal func createUser(_ name: String? = nil, _ email: String? = nil, _ password: String? = nil) throws -> User {
+    internal func createUser(name: String? = nil, email: String? = nil, password: String? = nil) throws -> User {
         let user: User = try User(
             name: name ?? "Mark Watney",
             email: email ?? "mwatney@nasa.gov",

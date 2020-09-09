@@ -54,4 +54,23 @@ final class ApiUserTest: TestCase {
             XCTAssertEqual(0, try User.query(on: app.db).count().wait())
         }
     }
+    
+    func test_can_update_user() throws {
+        
+        let user: User = try self.createUser(name: "Mork Wotney", email: "mwotney@gov.nasa")
+        
+        try app.test(.PUT, "api/users/\(user.id!)", beforeRequest: { req in
+            try req.content.encode([
+                "name": "Mark Watney",
+                "email": "mwatney@nasa.gov",
+                "password": "spacepirate"
+            ])
+        }) { res in
+            XCTAssertEqual(res.status, .accepted)
+            let content = try res.content.decode(UserUpdateContent.self)
+            
+            XCTAssertEqual(content.name, "Mark Watney")
+            XCTAssertEqual(content.email, "mwatney@nasa.gov")
+        }
+    }
 }
