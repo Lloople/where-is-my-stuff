@@ -6,9 +6,9 @@ struct ApiUserCreateAction {
     
     func invoke(req: Request) throws -> EventLoopFuture<Response> {
         
-        try CreateUserContent.validate(content: req)
+        try UserContent.validate(content: req)
         
-        let input = try req.content.decode(CreateUserContent.self)
+        let input = try req.content.decode(UserContent.self)
         
         let user = try User(
             name: input.name,

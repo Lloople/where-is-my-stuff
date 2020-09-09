@@ -5,13 +5,10 @@ struct ApiThingShowAction {
     init() { }
     
     func invoke(req: Request) throws -> EventLoopFuture<Thing> {
-        
-        let userId: UUID = try req.inputUUID("userId")
-        let thingId: UUID = try req.inputUUID("thingId")
-        
-        return Thing.query(on: req.db)
-            .filter(\.$id == thingId)
-            .filter(\.$user.$id == userId)
+
+        return try Thing.query(on: req.db)
+            .filter(\.$id == req.inputUUID("thingId"))
+            .filter(\.$user.$id == req.inputUUID("userId"))
             .first()
             .unwrap(or: Abort(.notFound))
     }

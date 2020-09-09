@@ -72,5 +72,25 @@ final class ApiThingTest: TestCase {
         }
     }
     
+    func test_can_update_user_thing() throws {
+        
+        let user: User = try self.createUser()
+        
+        let thing: Thing = try Thing(name: "Potata")
+        
+        try user.$things.create(thing, on: app.db).wait()
+        
+        try app.test(.PUT, "api/users/\(user.id!)/things/\(thing.id!)", beforeRequest: { req in
+            try req.content.encode([
+                "name": "Potato"
+            ])
+        }) { res in
+            XCTAssertEqual(res.status, .accepted)
+            
+            let content = try res.content.decode(Thing.self)
+            
+            XCTAssertEqual(content.name, "Potato")
+        }
+    }
     
 }

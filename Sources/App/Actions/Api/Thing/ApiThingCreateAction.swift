@@ -7,9 +7,9 @@ struct ApiThingCreateAction {
     
     func invoke(req: Request) throws -> EventLoopFuture<Response> {
       
-        try CreateThingContent.validate(content: req)
+        try ThingContent.validate(content: req)
         
-        let input = try req.content.decode(CreateThingContent.self)
+        let input = try req.content.decode(ThingContent.self)
 
         let thing = try Thing(
             name: input.name,

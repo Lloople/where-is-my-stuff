@@ -17,5 +17,6 @@ func routesApi(_ app: Application) throws {
     api.get("users", ":userId", "things", use: ApiThingIndexAction().invoke)
     api.get("users", ":userId", "things", ":thingId", use: ApiThingShowAction().invoke)
     api.post("users", ":userId", "things", use: ApiThingCreateAction().invoke)
+    api.put("users", ":userId", "things", ":thingId", use: ApiThingUpdateAction().invoke)
     api.delete("users", ":userId", "things", ":thingId", use: ApiThingDeleteAction().invoke)
 }

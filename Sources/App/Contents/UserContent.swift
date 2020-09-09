@@ -1,6 +1,6 @@
 import Vapor
 
-struct CreateUserContent: Content, Validatable {
+struct UserContent: Content, Validatable {
     var name: String
     var email: String
     var password: String

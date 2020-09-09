@@ -1,6 +1,6 @@
 import Vapor
 
-struct CreateThingContent: Content, Validatable {
+struct ThingContent: Content, Validatable {
     var name: String
     var description: String?
     var status: String?
