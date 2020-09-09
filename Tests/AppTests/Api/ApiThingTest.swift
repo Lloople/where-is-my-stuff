@@ -8,7 +8,7 @@ final class ApiThingTest: TestCase {
         
         let user: User = try self.createUser()
         
-        let thing = try Thing(name: "Rover")
+        let thing: Thing = try Thing(name: "Rover")
         
         try user.$things.create(thing, on: app.db).wait()
         
@@ -43,7 +43,7 @@ final class ApiThingTest: TestCase {
         
         let user: User = try self.createUser()
         
-        let thing = try Thing(name: "Potato")
+        let thing: Thing = try Thing(name: "Potato")
         
         try user.$things.create(thing, on: app.db).wait()
         
@@ -51,6 +51,24 @@ final class ApiThingTest: TestCase {
             XCTAssertEqual(res.status, .noContent)
             
             XCTAssertEqual(0, try Thing.query(on: app.db).count().wait())
+        }
+    }
+    
+    func test_can_show_user_thing() throws {
+        
+        let user: User = try self.createUser()
+        
+        let thing: Thing = try Thing(name: "Potato")
+        
+        try user.$things.create(thing, on: app.db).wait()
+        
+        try app.test(.GET, "api/users/\(user.id!)/things/\(thing.id!)") { res in
+            XCTAssertEqual(res.status, .ok)
+            let content = try res.content.decode(Thing.self)
+            
+            XCTAssertEqual(content.name, "Potato")
+            XCTAssertEqual(content.$user.id, try user.requireID())
+            XCTAssertEqual(try content.requireID(), try thing.requireID())
         }
     }
     
