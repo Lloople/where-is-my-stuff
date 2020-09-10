@@ -39,4 +39,18 @@ final class ApiListTest: TestCase {
         }
     }
     
+    func test_can_delete_list() throws {
+        
+        let user: User = try self.createUser()
+        
+        let list: List = List(name: "Vehicles")
+        
+        try user.$lists.create(list, on: app.db).wait()
+        
+        try app.test(.DELETE, "api/users/\(user.requireID())/lists/\(list.requireID())") { res in
+            XCTAssertEqual(res.status, .noContent)
+            
+            XCTAssertEqual(0, try List.query(on: app.db).count().wait())
+        }
+    }
 }
