@@ -71,4 +71,26 @@ final class ApiListTest: TestCase {
             XCTAssertEqual(try content.requireID(), try list.requireID())
         }
     }
+    
+    func test_can_update_user_list() throws {
+        
+        let user: User = try self.createUser()
+        
+        let list: List = List(name: "Vehiclas")
+        
+        try user.$lists.create(list, on: app.db).wait()
+        
+        try app.test(.PUT, "api/users/\(user.requireID())/lists/\(list.requireID())", beforeRequest: { req in
+            try req.content.encode([
+                "name": "Vehicles"
+            ])
+        }) { res in
+            XCTAssertEqual(res.status, .accepted)
+            
+            let content = try res.content.decode(List.self)
+            
+            XCTAssertEqual(content.name, "Vehicles")
+        }
+    }
+    
 }
