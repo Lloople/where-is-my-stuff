@@ -19,6 +19,9 @@ final class User: Model, Content {
     @Children(for: \.$user)
     var things: [Thing]
     
+    @Children(for: \.$user)
+    var lists: [List]
+    
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
     

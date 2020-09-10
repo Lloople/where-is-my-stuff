@@ -23,4 +23,5 @@ func prepareDatabase(_ app: Application) {
     
     app.migrations.add(CreateUser())
     app.migrations.add(CreateThing())
+    app.migrations.add(CreateList())
 }
