@@ -53,4 +53,22 @@ final class ApiListTest: TestCase {
             XCTAssertEqual(0, try List.query(on: app.db).count().wait())
         }
     }
+    
+    func test_can_show_list() throws {
+        
+        let user: User = try self.createUser()
+        
+        let list: List = List(name: "Vehicles")
+        
+        try user.$lists.create(list, on: app.db).wait()
+        
+        try app.test(.GET, "api/users/\(user.requireID())/lists/\(list.requireID())") { res in
+            XCTAssertEqual(res.status, .ok)
+            let content = try res.content.decode(List.self)
+            
+            XCTAssertEqual(content.name, "Vehicles")
+            XCTAssertEqual(content.$user.id, try user.requireID())
+            XCTAssertEqual(try content.requireID(), try list.requireID())
+        }
+    }
 }

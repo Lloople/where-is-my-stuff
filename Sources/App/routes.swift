@@ -22,6 +22,7 @@ func routesApi(_ app: Application) throws {
     api.delete("users", ":userId", "things", ":thingId", use: ApiThingDeleteAction().invoke)
     
     api.get("users", ":userId", "lists", use: ApiListIndexAction().invoke)
+    api.get("users", ":userId", "lists", ":listId", use: ApiListShowAction().invoke)
     api.post("users", ":userId", "lists", use: ApiListCreateAction().invoke)
     api.delete("users", ":userId", "lists", ":listId", use: ApiListDeleteAction().invoke)
 }
