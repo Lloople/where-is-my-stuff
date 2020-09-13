@@ -20,6 +20,7 @@ struct ApiThingUpdateAction {
                 thing.description = input.description
                 thing.photo = input.photo
                 thing.status = input.status
+                thing.$list.id = input.listId
                 
                 return thing.update(on: req.db).flatMap {
                     return thing.encodeResponse(status: .accepted, for: req)

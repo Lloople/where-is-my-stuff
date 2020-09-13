@@ -85,9 +85,13 @@ final class ApiThingTest: TestCase {
         
         try user.$things.create(thing, on: app.db).wait()
         
+        let list: List = List(name: "food")
+        
+        try user.$lists.create(list, on: app.db).wait()
         try app.test(.PUT, "api/users/\(user.id!)/things/\(thing.id!)", beforeRequest: { req in
             try req.content.encode([
-                "name": "Potato"
+                "name": "Potato",
+                "listId": list.requireID().uuidString
             ])
         }) { res in
             XCTAssertEqual(res.status, .accepted)
@@ -95,6 +99,7 @@ final class ApiThingTest: TestCase {
             let content = try res.content.decode(Thing.self)
             
             XCTAssertEqual(content.name, "Potato")
+            XCTAssertEqual(try list.requireID(), content.$list.id)
         }
     }
     
