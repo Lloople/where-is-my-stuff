@@ -6,6 +6,7 @@ struct CreateThing: Migration {
         return database.schema("things")
             .id()
             .field("user_id", .uuid, .required, .references("users", "id"))
+            .field("list_id", .uuid, .references("lists", "id"))
             .field("name", .string, .required)
             .field("description", .string)
             .field("status", .string)

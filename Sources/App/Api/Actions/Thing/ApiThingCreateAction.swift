@@ -16,7 +16,12 @@ struct ApiThingCreateAction {
             description: input.description,
             status: input.status
         )
+
+        if (input.listId != nil) {
+            thing.$list.id = input.listId!
+        }
         
+
         return User.find(try req.inputUUID("userId"), on: req.db)
             .unwrap(or: Abort(.notFound))
             .flatMap { user in

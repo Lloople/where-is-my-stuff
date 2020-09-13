@@ -22,10 +22,14 @@ final class ApiThingTest: TestCase {
         
         let user: User = try self.createUser()
         
+        let list: List = List(name: "vehicles")
+        try user.$lists.create(list, on: app.db).wait()
+        
         try app.test(.POST, "api/users/\(user.requireID())/things", beforeRequest: { req in
             try req.content.encode([
                 "name": "Rover",
-                "description": "Since I'm driving this without authorization, I'm a space pirate!"
+                "description": "Since I'm driving this without authorization, I'm a space pirate!",
+                "listId": list.requireID().uuidString
             ])
         }) { res in
             XCTAssertEqual(res.status, .created)
@@ -36,6 +40,7 @@ final class ApiThingTest: TestCase {
             
             XCTAssertEqual("Rover", thing.name)
             XCTAssertEqual(try user.requireID(), thing.$user.id)
+            XCTAssertEqual(try list.requireID(), thing.$list.id)
         }
     }
     

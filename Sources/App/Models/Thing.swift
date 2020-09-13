@@ -11,6 +11,9 @@ final class Thing: Model, Content {
     @Parent(key: "user_id")
     var user: User
     
+    @OptionalParent(key: "list_id")
+    var list: List?
+    
     @Field(key: "name")
     var name: String
     

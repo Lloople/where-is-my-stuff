@@ -8,6 +8,9 @@ final class List: Content, Model {
     @ID(key: .id)
     var id: UUID?
     
+    @Children(for: \.$list)
+    var things: [Thing]
+    
     @Field(key: "name")
     var name: String
     

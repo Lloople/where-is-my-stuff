@@ -22,6 +22,6 @@ func prepareDatabase(_ app: Application) {
     ), as: .mysql)
     
     app.migrations.add(CreateUser())
-    app.migrations.add(CreateThing())
     app.migrations.add(CreateList())
+    app.migrations.add(CreateThing())
 }
